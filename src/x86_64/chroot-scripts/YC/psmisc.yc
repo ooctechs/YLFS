@@ -1,0 +1,17 @@
+NAME=psmisc
+VERSION=22.17
+URL=http://downloads.sourceforge.net/psmisc/psmisc-22.17.tar.gz
+MD5=634e0f7c3b3dde22ea879e6279c9ec61
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    ./configure --prefix=/usr --exec-prefix=""
+    make
+    make install
+    mv -v /bin/pstree* /usr/bin
+    ln -sv killall /bin/pidof
+
+}

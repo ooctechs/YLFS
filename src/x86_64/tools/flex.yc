@@ -1,0 +1,25 @@
+NAME=flex
+VERSION=2.5.35
+URL=http://downloads.sourceforge.net/flex/flex-2.5.35.tar.bz2
+MD5=10714e50cea54dc7a227e3eddcd44d57
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    patch -Np1 -i ../flex-2.5.35-gcc44-1.patch
+
+    cat > config.cache << EOF
+ac_cv_func_malloc_0_nonnull=yes
+ac_cv_func_realloc_0_nonnull=yes
+EOF
+
+    CC="${CC} ${BUILD64}" ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET} \
+        --cache-file=config.cache
+
+    make
+    make install
+
+}

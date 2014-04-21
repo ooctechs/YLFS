@@ -1,0 +1,21 @@
+NAME=bzip2
+VERSION=1.0.6
+SIZE=764K
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    cp -v Makefile{,.orig}
+    sed -e 's@^\(all:.*\) test@\1@g' Makefile.orig > Makefile
+
+    make CC="${CC}" AR="${AR}" RANLIB="${RANLIB}"
+
+    make PREFIX=/tools install
+
+}

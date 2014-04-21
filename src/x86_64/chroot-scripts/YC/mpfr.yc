@@ -1,0 +1,18 @@
+NAME=mpfr
+VERSION=3.1.0
+URL=http://www.mpfr.org/mpfr-3.1.0/mpfr-3.1.0.tar.bz2
+MD5=238ae4a15cc3a5049b723daef5d17938
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+function build () {
+
+    CC="gcc -isystem /usr/include" \
+        LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
+        ./configure --prefix=/usr --enable-shared \
+        --with-gmp=/usr
+
+    make
+    make check
+    make install
+
+}

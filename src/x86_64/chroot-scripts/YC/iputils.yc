@@ -1,0 +1,24 @@
+NAME=iputils
+VERSION=s20101006
+URL=http://www.skbuff.net/iputils/iputils-s20101006.tar.bz2
+MD5=a36c25e9ec17e48be514dc0485e7376c
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    patch -Np1 -i ../iputils-s20101006-fixes-1.patch
+    patch -Np1 -i ../iputils-s20101006-doc-1.patch
+    make IPV4_TARGETS="tracepath ping rdisc clockdiff rdisc" \
+        IPV6_TARGETS="tracepath6 traceroute6"
+
+    install -v -m755 ping /bin
+    install -v -m755 clockdiff /usr/bin
+    install -v -m755 rdisc /usr/bin
+    install -v -m755 tracepath /usr/bin
+    install -v -m755 trace{path,route}6 /usr/bin
+    install -v -m644 doc/*.8 /usr/share/man/man8
+
+
+}

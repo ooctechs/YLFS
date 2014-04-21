@@ -1,0 +1,20 @@
+NAME=udev
+VERSION=182
+URL=http://www.kernel.org/pub//linux/utils/kernel/hotplug/udev-182.tar.xz
+MD5=023877e6cc0d907994b8c648beab542b
+
+PACKAGE=${NAME}-${VERSION}.tar.xz
+
+function build () {
+
+    ./configure --prefix=/usr \
+        --exec-prefix="" --sysconfdir=/etc \
+        --with-usb-ids-path=no --with-pci-ids-path=no \
+        --disable-introspection --disable-keymap
+
+    make
+    make install
+
+    install -dv /lib/firmware
+
+}

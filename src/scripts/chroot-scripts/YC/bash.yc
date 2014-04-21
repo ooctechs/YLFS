@@ -1,0 +1,21 @@
+NAME=bash
+VERSION=4.2
+SIZE=6.7M
+
+HOME=http://www.zlib.net
+URL=http://zlib.net/zlib-1.2.5.tar.bz2
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+function build () {
+
+    patch -Np1 -i ../bash-4.2-branch_update-2.patch
+
+    ./configure --prefix=/usr --bindir=/bin \
+        --without-bash-malloc --with-installed-readline
+
+    make
+    make htmldir=/usr/share/doc/bash-4.2 install
+
+}

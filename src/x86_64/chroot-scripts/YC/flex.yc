@@ -1,0 +1,29 @@
+NAME=flex
+VERSION=2.5.35
+URL=http://downloads.sourceforge.net/flex/flex-2.5.35.tar.bz2
+MD5=10714e50cea54dc7a227e3eddcd44d57
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    patch -Np1 -i ../flex-2.5.35-gcc44-1.patch
+
+    ./configure --prefix=/usr
+    make
+    make install
+
+    ln -sv libfl.a /usr/lib/libl.a
+
+    cat > /usr/bin/lex << "EOF"
+#!/bin/sh
+# Begin /usr/bin/lex
+
+exec /usr/bin/flex -l "$@"
+
+# End /usr/bin/lex
+EOF
+    chmod -v 755 /usr/bin/lex
+
+}

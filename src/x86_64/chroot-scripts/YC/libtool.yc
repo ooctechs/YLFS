@@ -1,0 +1,16 @@
+NAME=libtool
+VERSION=2.4.2
+URL=http://ftp.gnu.org/gnu/libtool/libtool-2.4.2.tar.xz
+MD5=2ec8997e0c07249eb4cbd072417d70fe
+
+PACKAGE=${NAME}-${VERSION}.tar.xz
+
+
+function build () {
+
+    ./configure --prefix=/usr
+
+    make
+    make install
+
+}

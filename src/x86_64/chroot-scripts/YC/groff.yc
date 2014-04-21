@@ -1,0 +1,20 @@
+NAME=groff
+VERSION=1.21
+URL=http://ftp.gnu.org/gnu/groff/groff-1.21.tar.gz
+MD5=8b8cd29385b97616a0f0d96d0951c5bf
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    PAGE=A4 ./configure --prefix=/usr
+
+    make
+    make install
+
+    ln -sv soelim /usr/bin/zsoelim
+    ln -sv eqn /usr/bin/geqn
+    ln -sv tbl /usr/bin/gtbl
+
+}

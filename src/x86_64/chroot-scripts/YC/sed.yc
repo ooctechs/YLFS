@@ -1,0 +1,19 @@
+NAME=sed
+VERSION=4.2.1
+URL=http://ftp.gnu.org/gnu/sed/sed-4.2.1.tar.bz2
+MD5=7d310fbd76e01a01115075c1fd3f455a
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    ./configure --prefix=/usr --bindir=/bin
+
+    make
+    make html
+
+    make install
+    make -C doc install-html
+
+}

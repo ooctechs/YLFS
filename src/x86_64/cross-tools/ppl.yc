@@ -1,0 +1,21 @@
+NAME=ppl
+VERSION=0.11.2
+URL=ftp://ftp.cs.unipr.it/pub/ppl/releases/0.11.2/ppl-0.11.2.tar.bz2
+MD5=c24429e6c3bc97d45976a63f40f489a1
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    CPPFLAGS="-I/cross-tools/include" \
+        LDFLAGS="-Wl,-rpath,/cross-tools/lib" \
+        ./configure --prefix=/cross-tools --enable-shared \
+        --enable-interfaces="c,cxx" --disable-optimization \
+        --with-libgmp-prefix=/cross-tools \
+        --with-libgmpxx-prefix=/cross-tools
+
+    make
+    make install
+
+}

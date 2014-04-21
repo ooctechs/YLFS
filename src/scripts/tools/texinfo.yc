@@ -1,0 +1,28 @@
+NAME=texinfo
+VERSION=4.13a
+SIZE=2.7M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+DECOMPRESS_NAME=${NAME}-4.13
+
+function build () {
+
+    ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET}
+
+    make -C tools/gnulib/lib
+    make -C tools
+
+    make
+    make install
+
+}
+
+function clean () {
+    cd ..
+    rm -rf texinfo-4.13
+}

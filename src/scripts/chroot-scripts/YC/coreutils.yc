@@ -1,0 +1,45 @@
+NAME=coreutils
+VERSION=8.12
+SIZE=11M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    patch -Np1 -i ../coreutils-8.12-uname-1.patch
+
+    ./configure --prefix=/usr \
+        --enable-no-install-program=kill,uptime \
+        --enable-install-program=hostname
+
+    make
+
+    echo "dummy1:x:1000:" >> /etc/group
+    echo "dummy2:x:1001:dummy" >> /etc/group
+    echo "dummy:x:1000:1000::/root:/bin/bash" >> /etc/passwd
+
+    make NON_ROOT_USERNAME=dummy check-root
+
+    chown -Rv dummy config.log {gnulib-tests,lib,src,tests}
+
+    src/su dummy -c "make RUN_EXPENSIVE_TESTS=yes check"
+
+    sed -i '/dummy/d' /etc/passwd /etc/group
+
+    make install
+
+    mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date} /bin
+    mv -v /usr/bin/{dd,df,echo,false,hostname,ln,ls,mkdir,mknod} /bin
+    mv -v /usr/bin/{mv,pwd,rm,rmdir,stty,true,uname} /bin
+    mv -v /usr/bin/chroot /usr/sbin
+
+    mv -v /usr/bin/{[,basename,head,install,nice} /bin
+        mv -v /usr/bin/{readlink,sleep,sync,test,touch} /bin
+        ln -svf ../../bin/install /usr/bin
+
+}

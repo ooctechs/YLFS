@@ -1,0 +1,26 @@
+NAME=e2fsprogs
+VERSION=1.41.14
+SIZE=4.4M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    mkdir -v build
+    cd build
+
+    ../configure --prefix=/usr --with-root-prefix="" \
+        --enable-elf-shlibs --disable-libblkid \
+        --disable-libuuid --disable-fsck \
+        --disable-uuidd
+
+    make
+    make install
+    make install-libs
+
+}

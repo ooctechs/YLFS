@@ -1,0 +1,26 @@
+NAME=kmod
+VERSION=8
+URL=http://www.kernel.org/pub//linux/utils/kernel/kmod/kmod-8.tar.xz
+MD5=d4e3d038b5370b1e8ff237c55666aa64
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    ./configure --prefix=/usr \
+        --bindir=/bin --sysconfdir=/etc \
+        --with-rootlibdir=/lib \
+        --with-zlib --with-xz
+
+    make
+    make install
+
+    ln -sv kmod /bin/lsmod
+    ln -sv ../bin/kmod /sbin/depmod
+    ln -sv ../bin/kmod /sbin/insmod
+    ln -sv ../bin/kmod /sbin/modprobe
+    ln -sv ../bin/kmod /sbin/modinfo
+    ln -sv ../bin/kmod /sbin/rmmod
+
+}

@@ -1,0 +1,43 @@
+NAME=eglibc
+VERSION=2.15-r17386
+URL=http://cross-lfs.org/~cosmo/sources/eglibc-2.15-r17386.tar.bz2
+MD5=933b6c8c35a0006c996fbac913f2b067
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+DECOMPRESS_NAME=${NAME}-2.15
+
+
+function build () {
+
+    cp -v Makeconfig{,.orig}
+    sed -e 's/-lgcc_eh//g' Makeconfig.orig > Makeconfig
+
+    mkdir -v ../eglibc-build
+    cd ../eglibc-build
+
+    cat > config.cache << "EOF"
+libc_cv_forced_unwind=yes
+libc_cv_c_cleanup=yes
+libc_cv_gnu89_inline=yes
+libc_cv_ssp=no
+EOF
+
+    BUILD_CC="gcc" CC="${CLFS_TARGET}-gcc ${BUILD64}" \
+        AR="${CLFS_TARGET}-ar" RANLIB="${CLFS_TARGET}-ranlib" \
+        ../eglibc-2.15/configure --prefix=/tools \
+        --host=${CLFS_TARGET} --build=${CLFS_HOST} \
+        --disable-profile --enable-add-ons \
+        --with-tls --enable-kernel=2.6.0 --with-__thread \
+        --with-binutils=/cross-tools/bin --with-headers=/tools/include \
+        --cache-file=config.cache
+
+    make
+    make install inst_vardbdir=/tools/var/db
+
+}
+
+
+function clean () {
+    cd ..
+    rm -rf eglibc-build eglibc-2.15
+}

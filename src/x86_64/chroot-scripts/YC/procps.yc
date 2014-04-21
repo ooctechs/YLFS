@@ -1,0 +1,19 @@
+NAME=procps
+VERSION=3.2.8
+URL=http://procps.sourceforge.net/procps-3.2.8.tar.gz
+MD5=9532714b6846013ca9898984ba4cd7e0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    patch -Np1 -i ../procps-3.2.8-ps_cgroup-1.patch
+    patch -Np1 -i ../procps-3.2.8-fix_HZ_errors-1.patch
+
+    sed -i -r '/^-include/s/\*(.*)/proc\1 ps\1/' Makefile
+
+    make
+    make install
+
+}

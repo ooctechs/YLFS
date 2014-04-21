@@ -1,0 +1,112 @@
+NAME=eglibc
+VERSION=2.13-r13356
+SIZE=16M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+DECOMPRESS_NAME=${NAME}-2.13
+
+
+function build () {
+
+    sed -i 's/\(&& $name ne\) "db1"/ & \1 "nss_test1"/' scripts/test-installation.pl
+
+    LINKER=$(readelf -l /tools/bin/bash | sed -n 's@.*interpret.*/tools\(.*\)]$@\1@p')
+    sed -i "s|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=${LINKER} -o|" \
+        scripts/test-installation.pl
+    unset LINKER
+
+
+    mkdir -v ../eglibc-build
+    cd ../eglibc-build
+
+    CFLAGS="-march=$(cut -d- -f1 <<< $MACHTYPE) \
+    -mtune=generic -g -O2" ../eglibc-2.13/configure --prefix=/usr \
+        --disable-profile --enable-add-ons --enable-kernel=2.6.0 \
+        --libexecdir=/usr/lib/eglibc
+
+    make
+
+    cp -v ../eglibc-2.13/iconvdata/gconv-modules iconvdata
+    make -k check 2>&1 | tee eglibc-check-log; grep Error eglibc-check-log
+
+    touch /etc/ld.so.conf
+
+    make install
+
+
+cp localedata/SUPPORTED{,.bak}
+cat > localedata/SUPPORTED <<EOF
+SUPPORTED-LOCALES=\
+en_US.UTF-8/UTF-8 \
+en_US/ISO-8859-1 \
+zh_CN.GB18030/GB18030 \
+zh_CN.GBK/GBK \
+zh_CN.UTF-8/UTF-8 \
+zh_CN/GB2312 \
+zh_HK.UTF-8/UTF-8 \
+zh_HK/BIG5-HKSCS \
+zh_TW.EUC-TW/EUC-TW \
+zh_TW.UTF-8/UTF-8 \
+zh_TW/BIG5
+EOF
+
+
+    make localedata/install-locales
+    cp localedata/SUPPORTED{.bak,}
+
+    mkdir -pv /usr/lib/locale
+    localedef -i cs_CZ -f UTF-8 cs_CZ.UTF-8
+    localedef -i de_DE -f ISO-8859-1 de_DE
+    localedef -i de_DE@euro -f ISO-8859-15 de_DE@euro
+    localedef -i en_HK -f ISO-8859-1 en_HK
+    localedef -i en_PH -f ISO-8859-1 en_PH
+    localedef -i en_US -f ISO-8859-1 en_US
+    localedef -i es_MX -f ISO-8859-1 es_MX
+    localedef -i fa_IR -f UTF-8 fa_IR
+    localedef -i fr_FR -f ISO-8859-1 fr_FR
+    localedef -i fr_FR@euro -f ISO-8859-15 fr_FR@euro
+    localedef -i it_IT -f ISO-8859-1 it_IT
+    localedef -i ja_JP -f EUC-JP ja_JP
+
+    cat > /etc/nsswitch.conf << "EOF"
+# Begin /etc/nsswitch.conf
+
+passwd: files
+group: files
+shadow: files
+
+hosts: files dns
+networks: files
+
+protocols: files
+services: files
+ethers: files
+rpc: files
+
+# End /etc/nsswitch.conf
+EOF
+
+    cp -v --remove-destination /usr/share/zoneinfo/Asia/Shanghai \
+        /etc/localtime
+
+
+    cat > /etc/ld.so.conf << "EOF"
+# Begin /etc/ld.so.conf
+
+/usr/local/lib
+/opt/lib
+
+# End /etc/ld.so.conf
+EOF
+
+}
+
+
+function clean () {
+    cd ..
+    rm -rf eglibc-build eglibc-2.13
+}

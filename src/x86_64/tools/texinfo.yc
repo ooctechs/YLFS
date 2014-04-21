@@ -1,0 +1,30 @@
+NAME=texinfo
+VERSION=4.13a
+URL=http://ftp.gnu.org/gnu/texinfo/texinfo-4.13a.tar.gz
+MD5=71ba711519209b5fb583fed2b3d86fcb
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+DECOMPRESS_NAME=${NAME}-4.13
+
+function build () {
+
+    CC="${CC} ${BUILD64}" ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET}
+
+    make -C tools/gnulib/lib
+    make -C tools
+
+    make
+    make install
+
+}
+
+function clean () {
+    cd ..
+    rm -rf texinfo-4.13
+}
+
+
+# 如果出现错误
+# terminal.c:166: undefined reference to `tputs
+# 编绎机器要安装 ncurses-devel

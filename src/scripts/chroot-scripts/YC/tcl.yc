@@ -1,0 +1,25 @@
+NAME=tcl
+VERSION=8.5.9
+SIZE=4.3M
+
+HOME=http://www.zlib.net
+URL=http://zlib.net/zlib-1.2.5.tar.bz2
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=tcl8.5.9-src.tar.gz
+DECOMPRESS_NAME=tcl8.5.9
+
+
+function build () {
+
+    cd unix
+    ./configure --prefix=/tools
+
+    make
+    make install
+
+    make install-private-headers
+
+    ln -sv tclsh8.5 /tools/bin/tclsh
+
+}

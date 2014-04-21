@@ -1,0 +1,17 @@
+NAME=gmp
+VERSION=5.0.5
+URL=http://ftp.gnu.org/gnu/gmp/gmp-5.0.5.tar.bz2
+MD5=041487d25e9c230b0c42b106361055fe
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    HOST_CC=gcc CPPFLAGS=-fexceptions CC="${CC} ${BUILD64}" \
+        CXX="${CXX} ${BUILD64}" ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET} \
+        --enable-cxx
+
+    make
+    make install
+}

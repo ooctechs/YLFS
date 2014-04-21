@@ -1,0 +1,22 @@
+NAME=util-linux
+VERSION=2.20.1
+URL=http://www.kernel.org/pub//linux/utils/util-linux/v2.20/util-linux-2.20.1.tar.bz2
+MD5=079b37517fd4e002a2e6e992e8b4e361
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    sed -i 's@etc/adjtime@var/lib/hwclock/adjtime@g' \
+        hwclock/hwclock.c
+    mkdir -pv /var/lib/hwclock
+
+    ./configure --enable-arch \
+        --enable-partx --enable-write --disable-wall
+
+    make
+    make install
+
+    mv -v /usr/bin/logger /bin
+
+}

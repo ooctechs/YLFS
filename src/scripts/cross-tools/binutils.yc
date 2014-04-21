@@ -1,0 +1,27 @@
+NAME=binutils
+VERSION=2.21.1a
+SIZE=19M
+
+DECOMPRESS_NAME=$NAME-2.21.1
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+    mkdir -v ../binutils-build
+    cd ../binutils-build
+
+    AR=ar AS=as ../binutils-2.21.1/configure \
+        --prefix=/cross-tools --host=${CLFS_HOST} --target=${CLFS_TARGET} \
+        --with-sysroot=${CLFS} --with-lib-path=/tools/lib --disable-nls --enable-shared \
+        --disable-multilib
+
+    make configure-host
+    make
+    make install
+    cp -v ../binutils-2.21.1/include/libiberty.h /tools/include
+}

@@ -1,0 +1,15 @@
+NAME=ncurses
+VERSION=5.9
+URL=ftp://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.9.tar.gz
+MD5=8cb9c412e5f2d96bc6f459aa8c6282a1
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+function build () {
+    patch -Np1 -i ../ncurses-5.9-bash_fix-1.patch
+    ./configure --prefix=/cross-tools \
+        --without-debug --without-shared
+    make -C include
+    make -C progs tic
+    install -v -m755 progs/tic /cross-tools/bin
+}

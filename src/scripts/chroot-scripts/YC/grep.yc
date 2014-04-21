@@ -1,0 +1,19 @@
+NAME=grep
+VERSION=2.8
+SIZE=1.7M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    ./configure --prefix=/usr --bindir=/bin
+
+    make
+    make install
+
+}

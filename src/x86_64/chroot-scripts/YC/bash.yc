@@ -1,0 +1,19 @@
+NAME=bash
+VERSION=4.2
+URL=http://ftp.gnu.org/gnu/bash/bash-4.2.tar.gz
+MD5=3fb927c7c33022f1c327f14a81c0d4b0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    patch -Np1 -i ../bash-4.2-branch_update-4.patch
+
+    ./configure --prefix=/usr --bindir=/bin \
+        --without-bash-malloc --with-installed-readline
+
+    make
+    make htmldir=/usr/share/doc/bash-4.2 install
+
+}

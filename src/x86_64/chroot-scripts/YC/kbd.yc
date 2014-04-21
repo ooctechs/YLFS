@@ -1,0 +1,17 @@
+NAME=kbd
+VERSION=1.15.3
+URL=ftp://devel.altlinux.org/legion/kbd/kbd-1.15.3.tar.gz
+MD5=8143e179a0f3c25646ce5085e8777200
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    patch -Np1 -i ../kbd-1.15.3-es.po_fix-1.patch
+    ./configure --prefix=/usr
+    make
+    make install
+    mv -v /usr/bin/{kbd_mode,dumpkeys,loadkeys,openvt,setfont,setvtrgb} /bin
+
+}

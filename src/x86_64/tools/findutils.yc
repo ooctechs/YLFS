@@ -1,0 +1,21 @@
+NAME=findutils
+VERSION=4.4.2
+URL=http://ftp.gnu.org/gnu/findutils/findutils-4.4.2.tar.gz
+MD5=351cc4adb07d54877fa15f75fb77d39f
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    echo "gl_cv_func_wcwidth_works=yes" > config.cache
+    echo "ac_cv_func_fnmatch_gnu=yes" >> config.cache
+
+    CC="${CC} ${BUILD64}" ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET} \
+        --cache-file=config.cache
+
+    make
+    make install
+
+}

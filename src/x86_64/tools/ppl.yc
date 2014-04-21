@@ -1,0 +1,22 @@
+NAME=ppl
+VERSION=0.11.2
+URL=ftp://ftp.cs.unipr.it/pub/ppl/releases/0.11.2/ppl-0.11.2.tar.bz2
+MD5=c24429e6c3bc97d45976a63f40f489a1
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    CC="${CC} ${BUILD64}" ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET} \
+        --enable-interfaces="c,cxx" --enable-shared \
+        --disable-optimization --with-libgmp-prefix=/tools \
+        --with-libgmpxx-prefix=/tools
+
+    echo '#define PPL_GMP_SUPPORTS_EXCEPTIONS 1' >> confdefs.h
+
+    make
+    make install
+
+}

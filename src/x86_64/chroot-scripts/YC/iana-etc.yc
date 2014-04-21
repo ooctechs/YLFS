@@ -1,0 +1,16 @@
+NAME=iana-etc
+VERSION=2.30
+URL=http://ftp.cross-lfs.org/pub/clfs/conglomeration/iana-etc/iana-etc-2.30.tar.bz2
+MD5=3ba3afb1d1b261383d247f46cb135ee8
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    patch -Np1 -i ../iana-etc-2.30-get_fix-1.patch
+    make get
+    make
+    make install
+
+}

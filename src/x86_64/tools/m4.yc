@@ -1,0 +1,28 @@
+NAME=m4
+VERSION=1.4.16
+URL=http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.bz2
+MD5=8a7cef47fecab6272eb86a6be6363b2f
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+function build () {
+
+    cat > config.cache << EOF
+gl_cv_func_btowc_eof=yes
+gl_cv_func_mbrtowc_incomplete_state=yes
+gl_cv_func_mbrtowc_sanitycheck=yes
+gl_cv_func_mbrtowc_null_arg=yes
+gl_cv_func_mbrtowc_retval=yes
+gl_cv_func_mbrtowc_nul_retval=yes
+gl_cv_func_wcrtomb_retval=yes
+gl_cv_func_wctob_works=yes
+EOF
+
+    CC="${CC} ${BUILD64}" ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET} \
+        --cache-file=config.cache
+
+    make
+    make install
+
+}

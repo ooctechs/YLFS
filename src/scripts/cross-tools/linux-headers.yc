@@ -1,0 +1,17 @@
+NAME=linux
+VERSION=2.6.39
+SIZE=476KB
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.bz2
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+function build () {
+    install -dv /tools/include
+    make mrproper
+    make ARCH=i386 headers_check
+    make ARCH=i386 INSTALL_HDR_PATH=dest headers_install
+    cp -rv dest/include/* /tools/include
+}

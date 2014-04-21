@@ -1,0 +1,14 @@
+NAME=make
+VERSION=3.82
+URL=http://ftp.gnu.org/gnu/make/make-3.82.tar.bz2
+MD5=1a11100f3c63fcf5753818e59d63088f
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+function build () {
+
+    ./configure --prefix=/usr
+    make
+    make install
+
+}

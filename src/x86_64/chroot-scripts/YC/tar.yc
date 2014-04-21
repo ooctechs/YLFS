@@ -1,0 +1,18 @@
+NAME=tar
+VERSION=1.26
+URL=http://ftp.gnu.org/gnu/tar/tar-1.26.tar.bz2
+MD5=2cee42a2ff4f1cd4f9298eeeb2264519
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+function build () {
+
+    patch -Np1 -i ../tar-1.26-man-1.patch
+
+    FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr \
+        --bindir=/bin --libexecdir=/usr/sbin
+
+    make
+    make install
+
+}

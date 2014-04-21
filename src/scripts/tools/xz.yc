@@ -1,0 +1,18 @@
+NAME=xz
+VERSION=5.0.2
+SIZE=1000KB
+
+HOME=http://www.zlib.net
+URL=http://zlib.net/zlib-1.2.5.tar.bz2
+MD5=be1e89810e66150f5b0327984d8625a0
+
+
+function build () {
+
+    ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET}
+
+    make
+    make install
+
+}

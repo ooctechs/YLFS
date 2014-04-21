@@ -1,0 +1,13 @@
+NAME=man-pages
+VERSION=3.41
+URL=http://www.kernel.org/pub//linux/docs/man-pages/man-pages-3.41.tar.xz
+MD5=7395d284fa1b9e112006d736865781b0
+
+PACKAGE=${NAME}-${VERSION}.tar.xz
+
+
+function build () {
+
+    make install
+
+}

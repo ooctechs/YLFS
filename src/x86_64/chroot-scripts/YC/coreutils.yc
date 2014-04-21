@@ -1,0 +1,29 @@
+NAME=coreutils
+VERSION=8.16
+URL=http://ftp.gnu.org/gnu/coreutils/coreutils-8.16.tar.xz
+MD5=89b06f91634208dceba7b36ad1f9e8b9
+
+PACKAGE=${NAME}-${VERSION}.tar.xz
+
+
+function build () {
+
+    patch -Np1 -i ../coreutils-8.15-uname-1.patch
+
+    FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr \
+        --enable-no-install-program=kill,uptime \
+        --enable-install-program=hostname
+
+    make
+    make install
+
+    mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date} /bin
+    mv -v /usr/bin/{dd,df,echo,false,hostname,ln,ls,mkdir,mknod} /bin
+    mv -v /usr/bin/{mv,pwd,rm,rmdir,stty,true,uname} /bin
+    mv -v /usr/bin/chroot /usr/sbin
+
+    mv -v /usr/bin/{[,basename,head,install,nice} /bin
+    mv -v /usr/bin/{readlink,sleep,sync,test,touch} /bin
+    ln -svf ../../bin/install /usr/bin
+
+}

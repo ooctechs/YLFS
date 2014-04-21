@@ -1,0 +1,21 @@
+NAME=findutils
+VERSION=4.4.2
+URL=http://ftp.gnu.org/gnu/findutils/findutils-4.4.2.tar.gz
+MD5=351cc4adb07d54877fa15f75fb77d39f
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    ./configure --prefix=/usr --libexecdir=/usr/lib/locate \
+        --localstatedir=/var/lib/locate
+
+    make
+    make install
+
+    mv -v /usr/bin/find /bin
+
+    sed -i 's@find:=${BINDIR}@find:=/bin@' /usr/bin/updatedb
+
+}

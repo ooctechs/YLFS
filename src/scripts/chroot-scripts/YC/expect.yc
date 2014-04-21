@@ -1,0 +1,21 @@
+NAME=expect
+VERSION=5.45
+SIZE=615K
+
+HOME=http://www.zlib.net
+URL=http://zlib.net/zlib-1.2.5.tar.bz2
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=expect5.45.tar.gz
+DECOMPRESS_NAME=expect5.45
+
+
+function build () {
+
+    ./configure --prefix=/tools --with-tcl=/tools/lib \
+        --with-tclinclude=/tools/include
+
+    make
+    make SCRIPTS="" install
+
+}

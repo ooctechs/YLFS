@@ -1,0 +1,23 @@
+NAME=ncurses
+VERSION=5.9
+SIZE=2.7M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+function build () {
+
+    patch -Np1 -i ../ncurses-5.9-bash_fix-1.patch
+
+    ./configure --prefix=/tools --with-shared \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET} \
+        --without-debug --without-ada \
+        --enable-overwrite --with-build-cc=gcc
+
+    make
+    make install
+
+}

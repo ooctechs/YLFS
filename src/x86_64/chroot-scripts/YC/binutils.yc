@@ -1,0 +1,40 @@
+NAME=binutils
+VERSION=2.22
+URL=http://ftp.gnu.org/gnu/binutils/binutils-2.22.tar.bz2
+MD5=ee0f10756c84979622b992a4a61ea3f5
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    mkdir -v ../binutils-build
+    cd ../binutils-build
+
+    CC="gcc -isystem /usr/include" \
+        LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
+        ../binutils-2.22/configure --prefix=/usr \
+        --libdir=/usr/lib --enable-shared \
+        --disable-multilib --enable-64-bit-bfd \
+        --enable-cloog-backend=isl
+
+
+    make configure-host
+    make tooldir=/usr
+    ln -sv /lib /lib64
+    make check
+    rm -v /lib64
+
+    rm -v /usr/lib64/libstd*so*
+    rmdir -v /usr/lib64
+
+    make tooldir=/usr install
+    cp -v ../binutils-2.22/include/libiberty.h /usr/include
+
+}
+
+
+function clean () {
+    cd ..
+    rm -rf binutils-build binutils-2.21.1
+}

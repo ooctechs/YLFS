@@ -1,0 +1,15 @@
+NAME=automake
+VERSION=1.12
+URL=http://ftp.gnu.org/gnu/automake/automake-1.12.tar.xz
+MD5=5fc40c032ceaebecd1588b8d125b4781
+
+PACKAGE=${NAME}-${VERSION}.tar.xz
+
+function build () {
+
+    ./configure --prefix=/usr
+
+    make
+    make install
+
+}

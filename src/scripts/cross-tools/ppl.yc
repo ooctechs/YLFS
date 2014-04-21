@@ -1,0 +1,24 @@
+NAME=ppl
+VERSION=0.11.2
+SIZE=12M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    CPPFLAGS="-I/cross-tools/include" \
+        LDFLAGS="-Wl,-rpath,/cross-tools/lib" \
+        ./configure --prefix=/cross-tools --enable-shared \
+        --enable-interfaces="c,cxx" --disable-optimization \
+        --with-libgmp-prefix=/cross-tools \
+        --with-libgmpxx-prefix=/cross-tools
+
+    make
+    make install
+
+}

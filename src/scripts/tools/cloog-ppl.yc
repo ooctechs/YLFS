@@ -1,0 +1,25 @@
+NAME=cloog-ppl
+VERSION=0.15.11
+SIZE=755K
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    cp -v configure{,.orig}
+    sed -e "/LD_LIBRARY_PATH=/d" \
+        configure.orig > configure
+
+    ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET} --with-bits=gmp \
+        --with-ppl=/tools --with-gmp=/tools
+
+    make
+    make install
+
+}

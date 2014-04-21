@@ -1,0 +1,21 @@
+NAME=diffutils
+VERSION=3.0
+SIZE=1.8M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    ./configure --prefix=/usr
+
+    sed -i 's@\(^#define DEFAULT_EDITOR_PROGRAM \).*@\1"vi"@' lib/config.h
+
+    make
+    make install
+
+}

@@ -1,0 +1,15 @@
+NAME=xz
+VERSION=5.0.3
+URL=http://tukaani.org/xz/xz-5.0.3.tar.bz2
+MD5=8d900b742b94fa9e708ca4f5a4b29003
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    ./configure --prefix=/usr
+    make
+    make install
+    mv -v /usr/bin/{xz,lzma,lzcat,unlzma,unxz,xzcat} /bin
+}

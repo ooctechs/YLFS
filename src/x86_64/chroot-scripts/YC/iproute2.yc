@@ -1,0 +1,23 @@
+NAME=iproute2
+VERSION=3.3.0
+URL=http://www.kernel.org/pub//linux/utils/net/iproute2/iproute2-3.3.0.tar.xz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    sed -i '/^TARGETS/s@arpd@@g' misc/Makefile
+    sed -i '/ARPD/d' Makefile
+    rm man/man8/arpd.8
+
+    sed -i '/netlink\//d' ip/ipl2tp.c
+
+    make DESTDIR= DOCDIR=/usr/share/doc/iproute2 \
+        MANDIR=/usr/share/man
+
+    make DESTDIR= DOCDIR=/usr/share/doc/iproute2 \
+        MANDIR=/usr/share/man install
+
+}

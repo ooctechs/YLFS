@@ -1,0 +1,22 @@
+NAME=procps
+VERSION=3.2.8
+SIZE=280K
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    patch -Np1 -i ../procps-3.2.8-ps_cgroup-1.patch
+    patch -Np1 -i ../procps-3.2.8-fix_HZ_errors-1.patch
+
+    sed -i -r '/^-include/s/\*(.*)/proc\1 ps\1/' Makefile
+
+    make
+    make install
+
+}

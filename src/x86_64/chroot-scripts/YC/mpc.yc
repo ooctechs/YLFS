@@ -1,0 +1,19 @@
+NAME=mpc
+VERSION=0.9
+URL=http://www.multiprecision.org/mpc/download/mpc-0.9.tar.gz
+MD5=0d6acab8d214bd7d1fbbc593e83dd00d
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    CC="gcc -isystem /usr/include" \
+        LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
+        EGREP="grep -E" ./configure --prefix=/usr
+
+    make
+    make check
+    make install
+
+}

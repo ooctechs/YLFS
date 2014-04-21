@@ -1,0 +1,19 @@
+NAME=patch
+VERSION=2.6.1
+URL=http://ftp.gnu.org/gnu/patch/patch-2.6.1.tar.bz2
+MD5=0818d1763ae0c4281bcdc63cdac0b2c0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+function build () {
+
+    echo "ac_cv_func_strnlen_working=yes" > config.cache
+
+    CC="${CC} ${BUILD64}" ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET} \
+        --cache-file=config.cache
+
+    make
+    make install
+
+}

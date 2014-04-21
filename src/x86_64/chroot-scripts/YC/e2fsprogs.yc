@@ -1,0 +1,23 @@
+NAME=e2fsprogs
+VERSION=1.42.3
+URL=http://downloads.sourceforge.net/e2fsprogs/e2fsprogs-1.42.3.tar.gz
+MD5=73431146f58d40fe1375aba2060f0da8
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    mkdir -v build
+    cd build
+
+    ../configure --prefix=/usr --with-root-prefix="" \
+        --enable-elf-shlibs --disable-libblkid \
+        --disable-libuuid --disable-fsck \
+        --disable-uuidd
+
+    make
+    make install
+    make install-libs
+
+}

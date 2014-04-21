@@ -1,0 +1,31 @@
+NAME=shadow
+VERSION=4.1.5
+URL=http://pkg-shadow.alioth.debian.org/releases/shadow-4.1.5.tar.bz2
+MD5=03e237abaa5d47f92c6e655f92f22532
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    sed -i 's/man_MANS = $(man_nopam) /man_MANS = /' man/ru/Makefile.in
+    ./configure --sysconfdir=/etc --without-nscd
+
+    sed -i 's/groups$(EXEEXT) //' src/Makefile
+    find man -name Makefile -exec sed -i '/groups.1.xml/d' '{}' \;
+    find man -name Makefile -exec sed -i 's/groups.1 //' '{}' \;
+
+    make
+    make install
+
+    sed -i /etc/login.defs \
+        -e 's@#\(ENCRYPT_METHOD \).*@\1MD5@' \
+        -e 's@/var/spool/mail@/var/mail@'
+
+    mv -v /usr/bin/passwd /bin
+
+    # Config
+    pwconv
+    grpconv
+
+}

@@ -1,0 +1,22 @@
+NAME=zlib
+VERSION=1.2.7
+URL=http://zlib.net/zlib-1.2.7.tar.bz2
+MD5=60df6a37c56e7c1366cca812414f7b85
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    CC="gcc -isystem /usr/include" \
+        CXX="g++ -isystem /usr/include" \
+        LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
+        ./configure --prefix=/usr
+
+    make
+    make install
+
+    mv -v /usr/lib/libz.so.* /lib
+    ln -svf ../../lib/libz.so.1 /usr/lib/libz.so
+
+}

@@ -1,0 +1,25 @@
+NAME=coreutils
+VERSION=8.16
+URL=http://ftp.gnu.org/gnu/coreutils/coreutils-8.16.tar.xz
+MD5=89b06f91634208dceba7b36ad1f9e8b9
+
+PACKAGE=${NAME}-${VERSION}.tar.xz
+
+
+function build () {
+
+    touch man/uname.1 man/hostname.1
+
+    cat > config.cache << EOF
+fu_cv_sys_stat_statfs2_bsize=yes
+gl_cv_func_working_mkstemp=yes
+EOF
+
+    CC="${CC} ${BUILD64}" ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET} \
+        --enable-install-program=hostname --cache-file=config.cache
+
+    make
+    make install
+
+}

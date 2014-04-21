@@ -1,0 +1,23 @@
+NAME=readline
+VERSION=6.2
+URL=http://ftp.gnu.org/gnu/readline/readline-6.2.tar.gz
+MD5=67948acb2ca081f23359d0256e9a271c
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    patch -Np1 -i ../readline-6.2-branch_update-2.patch
+
+    ./configure --prefix=/usr --libdir=/lib
+    make SHLIB_LIBS=-lncurses
+    make install
+    make install-doc
+
+    mv -v /lib/lib{readline,history}.a /usr/lib
+    rm -v /lib/lib{readline,history}.so
+    ln -svf ../../lib/libreadline.so.6 /usr/lib/libreadline.so
+    ln -svf ../../lib/libhistory.so.6 /usr/lib/libhistory.so
+
+}

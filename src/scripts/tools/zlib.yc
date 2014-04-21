@@ -1,0 +1,16 @@
+NAME=zlib
+VERSION=1.2.5
+SIZE=476KB
+
+HOME=http://www.zlib.net
+URL=http://zlib.net/zlib-1.2.5.tar.bz2
+MD5=be1e89810e66150f5b0327984d8625a0
+
+
+function build () {
+
+    ./configure --prefix=/tools
+    make
+    make install
+
+}

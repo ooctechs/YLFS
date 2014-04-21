@@ -1,0 +1,101 @@
+#!/bin/bash
+
+
+# 函数: check_dir
+# 用途: 检查指定的一个或多个目录是否存在
+# 返回: 不存在目录的个数
+function check_dir () {
+
+    RET=0
+
+    if [ -z "$1" ]; then
+        echo "[EE] Usage: make_sure_dir DIR"
+        return 1
+    fi
+
+    for x in $@; do
+        if [ ! -d "$x" ]; then
+            echo "[EE] 目录 $x 不存在"
+            RET=$((RET+1))
+        fi
+    done
+
+    return $RET
+
+}
+
+
+# 函数: check_dir_create
+# 用途: 检查指定的一个或多个目录是否存在，如不存在，尝试递归方式创建之
+# 返回: 创建失败的目录个数
+function check_dir_create () {
+
+    RET=0
+
+    if [ -z "$1" ]; then
+        echo "[EE] Usage: make_sure_dir DIR"
+        return 1
+    fi
+
+    for x in $@; do
+        if [ ! -d "$x" ]; then
+            if mkdir -p $x; then
+                echo "[WW] 目录 $x 不存在, 创建成功"
+            else
+                echo "[EE] 目录 $x 不存在, 创建失败"
+                RET=$((RET+1))
+            fi
+        else
+            [[ $DEBUG -ge 1 ]] && echo "[DD] 目录 $x 存在"
+        fi
+    done
+
+    return $RET
+
+}
+
+
+# 函数: check_macro
+# 用途: 检查一个或几个宏是否有定义
+# 返回: 未定义宏的个数
+
+function check_macro () {
+
+    RET=0
+
+    for x in $@; do
+        M=$(eval echo "\${$x:-NOTSET}")
+        if [ "X$M" == "XNOTSET" ]; then
+            echo "[EE] $x 未设置"
+            RET=$((RET+1))
+        else
+            [[ $DEBUG -ge 1 ]] && echo "[DD] $x=$M"
+        fi
+    done
+
+    return $RET
+}
+
+# 函数: check_mount
+# 用途: 检查指定的一个或多个挂载点是否存在
+# 返回: 不存在挂载点个数
+
+function check_mount () {
+
+    RET=0
+
+    for x in $@; do
+        if [ ! -d "$x" ]; then
+            echo "[EE] 挂载点目录 $x 不存在"
+            continue
+        fi
+        if mount | grep "$x" > /dev/null 2>&1; then
+            [[ $DEBUG -ge 1 ]] && echo "[DD] 挂载点 $x 己存在"
+        else
+            RET=$((RET+1))
+        fi
+    done
+
+    return $RET
+
+}

@@ -1,0 +1,22 @@
+NAME=gmp
+VERSION=5.0.5
+URL=http://ftp.gnu.org/gnu/gmp/gmp-5.0.5.tar.bz2
+MD5=041487d25e9c230b0c42b106361055fe
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    #mv -v config{fsf,}.guess
+    #mv -v config{fsf,}.sub
+
+    CPPFLAGS=-fexceptions CC="gcc -isystem /usr/include" \
+        CXX="g++ -isystem /usr/include" \
+        LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
+        ./configure --prefix=/usr --enable-cxx --enable-mpbsd
+
+    make
+    make check
+    make install
+
+}

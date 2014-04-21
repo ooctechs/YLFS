@@ -1,0 +1,17 @@
+NAME=iana-etc
+VERSION=2.30
+SIZE=201K
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    make
+    make install
+
+}

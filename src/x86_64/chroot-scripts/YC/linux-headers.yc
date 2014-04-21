@@ -1,0 +1,15 @@
+NAME=linux
+VERSION=3.3.7
+
+URL=http://www.kernel.org/pub/linux/kernel/v3.0/linux-3.3.7.tar.bz2
+MD5=6709647a7576c9e21b082f4d3d7a94cf
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+function build () {
+    make mrproper
+    make headers_check
+    make INSTALL_HDR_PATH=dest headers_install
+    cp -rv dest/include/* /usr/include
+    find /usr/include -name .install -or -name ..install.cmd | xargs rm -fv
+}

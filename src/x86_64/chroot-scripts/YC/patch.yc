@@ -1,0 +1,17 @@
+NAME=patch
+VERSION=2.6.1
+URL=http://ftp.gnu.org/gnu/patch/patch-2.6.1.tar.bz2
+MD5=0818d1763ae0c4281bcdc63cdac0b2c0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    patch -Np1 -i ../patch-2.6.1-test_fix-1.patch
+
+    ./configure --prefix=/usr
+    make
+    make install
+
+}

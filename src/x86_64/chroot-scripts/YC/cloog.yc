@@ -1,0 +1,19 @@
+NAME=cloog
+VERSION=0.16.3
+URL=http://www.bastoul.net/cloog/pages/download/cloog-0.16.3.tar.gz
+MD5=a0f8a241cd1c4f103f8d2c91642b3498
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    CC="gcc -isystem /usr/include" \
+        LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
+        ./configure --prefix=/usr --enable-shared
+
+    make
+    make check
+    make install
+
+}

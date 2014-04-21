@@ -1,0 +1,16 @@
+NAME=less
+VERSION=444
+URL=http://www.greenwoodsoftware.com/less/less-444.tar.gz
+MD5=56f9f76ffe13f70155f47f6b3c87d421
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    ./configure --prefix=/usr --sysconfdir=/etc
+    make
+    make install
+    mv -v /usr/bin/less /bin
+
+}

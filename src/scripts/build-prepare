@@ -1,0 +1,112 @@
+#!/bin/bash
+
+RET=0
+# TODO:
+#CLFS_SOURCES=/mnt/clfs/sources
+#CLFS_CROSS_TOOLS=/cross-tools
+
+if [ -z "$CLFS_CROSS_TOOLS" ]; then
+    echo "   \$CLFS_CROSS_TOOLS 未设置" && RET=1
+else
+    if [ ! -d $CLFS_CROSS_TOOLS ]; then
+        echo "   \$CLFS_CROSS_TOOLS 目录不存在" && RET=1
+    fi
+fi
+
+if [ -z "$CLFS_TOOLS" ]; then
+    echo "   \$CLFS_TOOLS 未设置" && RET=1
+else
+    if [ ! -d $CLFS_TOOLS ]; then
+        echo "   \$CLFS_TOOLS 目录不存在" && RET=1
+    fi
+fi
+
+if [ -z "$CLFS" ]; then
+    echo "   \$CLFS 未设置" && RET=1
+else
+    if [ ! -d $CLFS ]; then
+        echo "   \$CLFS 目录不存在" && RET=1
+    fi
+fi
+
+
+[ $RET -ne 0 ] && exit 11
+
+
+function log () {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1 ..."
+}
+
+function yexit () {
+    echo "[EE] 在 $1 时返回 $2"
+    return $2 # TODO
+}
+
+
+function check_macro () {
+
+    for x in $@; do
+        M=$(eval echo "\${$x:-NOTSET}")
+        if [ "X$M" == "XNOTSET" ]; then
+            echo "   $x 未设置" && RET=1
+        else
+            echo "   $x=$M"
+        fi
+    done
+
+}
+
+
+function check_needed_macros () {
+    echo "=> 检查必要的宏定义"
+
+    check_macro NAME VERSION SIZE HOME URL MD5
+
+    [ $RET -ne 0 ] && yexit check_needed_macros 12
+}
+
+
+function prepare() {
+
+    cd $CLFS_SOURCES
+
+    if [ -z "$DECOMPRESS_NAME" ]; then
+        DECOMPRESS_NAME="$NAME-$VERSION"
+    fi
+
+    if [ -z "$PACKAGE" ]; then
+        for suffix in .tar.bz2 .tar.gz .tgz; do
+            N="${NAME}-${VERSION}${suffix}"
+            if [ -f $N ]; then
+                PACKAGE=$N
+                break
+            fi
+        done
+    fi
+
+    if [ -f "$PACKAGE" ]; then
+        # TODO
+        [ -d "$DECOMPRESS_NAME" ] || tar xf $PACKAGE
+        # 进入目录
+        cd $DECOMPRESS_NAME
+    else
+        echo "=> $PACKAGE 不存在！"
+        yexit prepare 21
+    fi
+
+}
+
+
+function build () {
+    ./configure --prefix=$CLFS_CROSS_TOOLS || yexit build 31
+    make || yexit build 32
+    make install || yexit build 33
+}
+
+
+function clean () {
+    cd $CLFS_SOURCES
+    [ -d "$NAME-build" ] && rm -rf $NAME-build
+    [ -d "$NAME-$VERSION" ] && rm -rf "$NAME-$VERSION"
+    true # TODO
+}

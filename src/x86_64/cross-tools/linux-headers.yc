@@ -1,0 +1,17 @@
+NAME=linux
+VERSION=3.3.7
+
+URL=http://www.kernel.org/pub/linux/kernel/v3.0/linux-3.3.7.tar.bz2
+MD5=6709647a7576c9e21b082f4d3d7a94cf
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+function build () {
+    install -dv /tools/include
+    make mrproper
+#    make ARCH=i386 headers_check
+#    make ARCH=i386 INSTALL_HDR_PATH=dest headers_install
+    make ARCH=x86_64 headers_check
+    make ARCH=x86_64 INSTALL_HDR_PATH=dest headers_install
+    cp -rv dest/include/* /tools/include
+}

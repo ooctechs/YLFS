@@ -1,0 +1,39 @@
+NAME=ncurses
+VERSION=5.9
+URL=ftp://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.9.tar.gz
+MD5=8cb9c412e5f2d96bc6f459aa8c6282a1
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    patch -Np1 -i ../ncurses-5.9-branch_update-3.patch
+
+    ./configure --prefix=/usr --libdir=/lib \
+        --with-shared --without-debug --enable-widec \
+        --with-manpage-format=normal
+
+    make
+    make install
+
+    mv -v /lib/lib{panelw,menuw,formw,ncursesw,ncurses++w}.a /usr/lib
+
+    rm -v /lib/lib{ncursesw,menuw,panelw,formw}.so
+    ln -svf ../../lib/libncursesw.so.5 /usr/lib/libncursesw.so
+    ln -svf ../../lib/libmenuw.so.5 /usr/lib/libmenuw.so
+    ln -svf ../../lib/libpanelw.so.5 /usr/lib/libpanelw.so
+    ln -svf ../../lib/libformw.so.5 /usr/lib/libformw.so
+
+    for lib in curses ncurses form panel menu ; do
+        echo "INPUT(-l${lib}w)" > /usr/lib/lib${lib}.so
+        ln -sfv lib${lib}w.a /usr/lib/lib${lib}.a
+    done
+    ln -sfv libncursesw.so /usr/lib/libcursesw.so
+    ln -sfv libncursesw.a /usr/lib/libcursesw.a
+    ln -sfv libncurses++w.a /usr/lib/libncurses++.a
+    ln -sfv ncursesw5-config /usr/bin/ncurses5-config
+
+    ln -sfv ../share/terminfo /usr/lib/terminfo
+
+}

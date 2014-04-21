@@ -1,0 +1,24 @@
+NAME=binutils
+VERSION=2.22
+URL=http://ftp.gnu.org/gnu/binutils/binutils-2.22.tar.bz2
+MD5=ee0f10756c84979622b992a4a61ea3f5
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+
+function build () {
+    mkdir -v ../binutils-build
+    cd ../binutils-build
+
+    AR=ar AS=as ../binutils-2.22/configure \
+        --prefix=/cross-tools --host=${CLFS_HOST} --target=${CLFS_TARGET} \
+        --with-sysroot=${CLFS} --with-lib-path=/tools/lib --disable-nls --enable-shared \
+        --enable-64-bit-bfd --disable-multilib --with-ppl=/cross-tools \
+  --with-cloog=/cross-tools --enable-cloog-backend=isl
+
+    make configure-host
+    make
+    make install
+    cp -v ../binutils-2.22/include/libiberty.h /tools/include
+}

@@ -1,0 +1,25 @@
+NAME=cloog-ppl
+VERSION=0.15.11
+SIZE=755K
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    cp -v configure{,.orig}
+    sed -e "/LD_LIBRARY_PATH=/d" \
+        configure.orig > configure
+
+    LDFLAGS="-Wl,-rpath,/cross-tools/lib" \
+        ./configure --prefix=/cross-tools --enable-shared --with-bits=gmp \
+        --with-gmp=/cross-tools --with-ppl=/cross-tools
+
+    make
+    make install
+
+}

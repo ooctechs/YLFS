@@ -1,0 +1,22 @@
+NAME=tcl
+VERSION=8.5.11
+URL=http://downloads.sourceforge.net/tcl/tcl8.5.11-src.tar.gz
+MD5=b01a9691c83990b3db0ce62d1012ca67
+
+PACKAGE=tcl8.5.11-src.tar.gz
+DECOMPRESS_NAME=tcl8.5.11
+
+
+function build () {
+
+    cd unix
+    ./configure --prefix=/tools
+
+    make
+    make install
+
+    make install-private-headers
+
+    ln -sv tclsh8.5 /tools/bin/tclsh
+
+}

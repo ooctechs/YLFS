@@ -1,0 +1,19 @@
+NAME=linux
+VERSION=2.6.39
+SIZE=476KB
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.bz2
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+function build () {
+
+    make mrproper
+    make headers_check
+    make INSTALL_HDR_PATH=dest headers_install
+    cp -rv dest/include/* /usr/include
+    find /usr/include -name .install -or -name ..install.cmd | xargs rm -fv
+
+}

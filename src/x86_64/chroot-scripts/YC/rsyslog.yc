@@ -1,0 +1,16 @@
+NAME=rsyslog
+VERSION=6.2.0
+URL=http://www.rsyslog.com/files/download/rsyslog/rsyslog-6.2.0.tar.gz
+MD5=03e237abaa5d47f92c6e655f92f22532
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    ./configure --prefix=/usr
+    make
+    make install
+    install -dv /etc/rsyslog.d
+
+}

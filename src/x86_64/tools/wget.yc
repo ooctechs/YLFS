@@ -1,0 +1,17 @@
+NAME=wget
+VERSION=1.10.2
+URL=http://ftp.gnu.org/gnu/wget/wget-1.10.2.tar.gz
+MD5=795fefbb7099f93e2d346b026785c4b8
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+function build () {
+
+    CC="${CC} ${BUILD64}" ./configure  \
+    --prefix=/tools --sysconfdir=/tools/etc \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET}
+
+    make
+    make install
+
+}

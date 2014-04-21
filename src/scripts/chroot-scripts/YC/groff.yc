@@ -1,0 +1,23 @@
+NAME=groff
+VERSION=1.21
+SIZE=3.7M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    PAGE=A4 ./configure --prefix=/usr
+
+    make
+    make install
+
+    ln -sv soelim /usr/bin/zsoelim
+    ln -sv eqn /usr/bin/geqn
+    ln -sv tbl /usr/bin/gtbl
+
+}

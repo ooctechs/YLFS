@@ -1,0 +1,22 @@
+NAME=cloog
+VERSION=0.16.3
+URL=http://www.bastoul.net/cloog/pages/download/cloog-0.16.3.tar.gz
+MD5=a0f8a241cd1c4f103f8d2c91642b3498
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    cp -v configure{,.orig}
+    sed -e "/LD_LIBRARY_PATH=/d" \
+        configure.orig > configure
+
+    CC="${CC} ${BUILD64}" ./configure --prefix=/tools \
+        --build=${CLFS_HOST} --host=${CLFS_TARGET} \
+        --enable-shared --with-gmp-prefix=/tools
+
+    make
+    make install
+
+}

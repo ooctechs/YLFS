@@ -1,0 +1,15 @@
+NAME=libee
+VERSION=0.4.1
+URL=http://www.libee.org/download/files/download/libee-0.4.1.tar.gz
+MD5=7bbf4160876c12db6193c06e2badedb2
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    ./configure --prefix=/usr
+    make
+    make install
+
+}

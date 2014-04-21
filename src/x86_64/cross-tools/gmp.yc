@@ -1,0 +1,16 @@
+NAME=gmp
+VERSION=5.0.5
+URL=http://ftp.gnu.org/gnu/gmp/gmp-5.0.5.tar.bz2
+MD5=041487d25e9c230b0c42b106361055fe
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    CPPFLAGS=-fexceptions ./configure \
+        --prefix=/cross-tools --enable-cxx
+
+    make
+    make install
+}

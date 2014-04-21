@@ -1,0 +1,24 @@
+NAME=findutils
+VERSION=4.4.2
+SIZE=2.1M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    ./configure --prefix=/usr --libexecdir=/usr/lib/locate \
+        --localstatedir=/var/lib/locate
+
+    make
+    make install
+
+    mv -v /usr/bin/find /bin
+
+    sed -i 's@find:=${BINDIR}@find:=/bin@' /usr/bin/updatedb
+
+}

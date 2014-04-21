@@ -1,0 +1,14 @@
+NAME=dejagnu
+VERSION=1.5
+URL=http://ftp.gnu.org/gnu/dejagnu/dejagnu-1.5.tar.gz
+MD5=3df1cbca885e751e22d3ebd1ac64dc3c
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+function build () {
+
+    ./configure --prefix=/tools
+
+    make install
+
+}

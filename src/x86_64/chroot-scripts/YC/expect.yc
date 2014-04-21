@@ -1,0 +1,18 @@
+NAME=expect
+VERSION=5.45
+URL=http://downloads.sourceforge.net/project/expect/Expect/5.45/expect5.45.tar.gz
+MD5=44e1a4f4c877e9ddc5a542dfa7ecc92b
+
+PACKAGE=expect5.45.tar.gz
+DECOMPRESS_NAME=expect5.45
+
+
+function build () {
+
+    ./configure --prefix=/tools --with-tcl=/tools/lib \
+        --with-tclinclude=/tools/include
+
+    make
+    make SCRIPTS="" install
+
+}

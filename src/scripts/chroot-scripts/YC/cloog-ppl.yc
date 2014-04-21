@@ -1,0 +1,23 @@
+NAME=cloog-ppl
+VERSION=0.15.11
+SIZE=755K
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    CC="gcc -isystem /usr/include" \
+        LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
+        ./configure --prefix=/usr --enable-shared --with-gmp \
+        --with-ppl
+
+    make
+    make check
+    make install
+
+}

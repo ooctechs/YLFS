@@ -1,0 +1,16 @@
+NAME=man-pages
+VERSION=3.32
+SIZE=1.1M
+
+HOME=http://www.zlib.net
+URL=http://zlib.net/zlib-1.2.5.tar.bz2
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    make install
+
+}

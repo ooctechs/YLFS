@@ -1,0 +1,21 @@
+NAME=pkg-config
+VERSION=0.26
+SIZE=388K
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.gz
+
+
+function build () {
+
+    GLIB_CFLAGS="-I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include" \
+        GLIB_LIBS="-lglib-2.0" \
+        ./configure --prefix=/usr
+
+    make
+    make install
+
+}

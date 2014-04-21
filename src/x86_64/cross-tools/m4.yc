@@ -1,0 +1,6 @@
+NAME=m4
+VERSION=1.4.16
+URL=http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.bz2
+MD5=8a7cef47fecab6272eb86a6be6363b2f
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2

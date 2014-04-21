@@ -1,0 +1,15 @@
+NAME=autoconf
+VERSION=2.69
+URL=http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.xz
+MD5=50f97f4159805e374639a73e2636f22e
+
+PACKAGE=${NAME}-${VERSION}.tar.xz
+
+function build () {
+
+    ./configure --prefix=/usr
+
+    make
+    make install
+
+}

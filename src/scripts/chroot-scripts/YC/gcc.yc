@@ -1,0 +1,39 @@
+NAME=gcc
+VERSION=4.6.0
+SIZE=69M
+
+HOME=http://www.example.org
+URL=http://www.example.org/${NAME}-${VERSION}.tar.gz
+MD5=be1e89810e66150f5b0327984d8625a0
+
+PACKAGE=${NAME}-${VERSION}.tar.bz2
+
+
+function build () {
+
+    patch -Np1 -i ../gcc-4.6.0-branch_update-1.patch
+
+    sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
+
+    mkdir -v ../gcc-build
+    cd ../gcc-build
+
+    CC="gcc -isystem /usr/include" \
+        CXX="g++ -isystem /usr/include" \
+        LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
+        ../gcc-4.6.0/configure --prefix=/usr \
+        --libexecdir=/usr/lib --enable-shared --enable-threads=posix \
+        --enable-__cxa_atexit --enable-c99 --enable-long-long \
+        --enable-clocale=gnu --enable-languages=c,c++ \
+        --disable-multilib --disable-libstdcxx-pch
+
+    make
+    make -k check
+    ../gcc-4.6.0/contrib/test_summary
+
+    make install
+
+    ln -sv ../usr/bin/cpp /lib
+    ln -sv gcc /usr/bin/cc
+
+}
